@@ -2,7 +2,10 @@ import socketio
 import eventlet
 import json
 from flask import Flask
-from datetime import datetime
+from datetime import datetime as date
+from datetime import timedelta
+import thread
+from colour import get_bus, register_item, item_is_locked_in
 
 class Item(object):
     def __init__(self, name, colour):
@@ -21,6 +24,8 @@ class MessageEncoder(json.JSONEncoder):
             return obj.__dict__
         if isinstance(obj, Alarm):
             return obj.__dict__
+        if isinstance(obj, Colour):
+            return obj.__dict__
         return json.JSONEncoder.default(self, obj)
 
 next_day = {
@@ -36,9 +41,10 @@ next_day = {
 sio = socketio.Server()
 connections = set()
 alarms = {'id' : 0}
-items = {"test": Item("test", "red"), "test2" : Item("test2", "pink")}
+items = {"test": Item("test", Colour(123, 123, 123)), "test2" : Item("test2", Colour(55, 111, 222))}
 schedule = {}
 active_schedule = {}
+bus = get_bus()
 
 def emit_items():
     sio.emit('items', json.dumps(list(items.values()), cls=MessageEncoder))
@@ -58,7 +64,8 @@ def connect(sid):
 def register_item(sid, data):
     registration_data = json.loads(data)
     item_name = registration_data['item_name']
-    items[item_name] = Item(item_name, "test")
+    colour = register_item(bus)
+    items[item_name] = Item(item_name, colour)
     emit_items()
 
 @sio.on('unregister')
@@ -152,10 +159,28 @@ def remove_alarm(sid, data):
     for timespan in timespans:
         remove_from_schedule(timespan, schedule)
 
+def check_alarms():
+    while True:
+        for day, timespans in active_schedule.items():
+            if date.today().strftime("%A").lower() == day:
+                current_time = date.now().time()
+                minutes = current_time.hour() * 60 + current_time.minute()
+                for start_time, duration, item_name in timespans:
+                    if item_is_locked_in(bus, items[item_name].colour, date.now() + timedelta(minutes = duration)):
+                        sio.emit('stop_alarm', None)
+                    elif start_time - minutes <= 4 and start_time - minutes > 0:
+                        sio.emit('warning', {"item_name": item_name})
+                    elif start_time - minutes < 0:
+                        sio.emit('start_alarm', None)
+
+def createProcessingThread():
+    thread.start_new_thread(check_alarms)
+
 def initialize_server():
     app = Flask(__name__)
     app = socketio.Middleware(sio, app)
-    server = eventlet.listen(('0.0.0.0', 8082))
+    createProcessingThread()
+    server = eventlet.listen(('0.0.0.0', 8083))
     eventlet.wsgi.server(server, app)
 
 def test_create_alarm():
@@ -170,6 +195,7 @@ def test_create_alarm():
 def test_activate_alarm():
     data = '{"days": {"monday": {"start_time": 1023, "duration": 500, "item_name": "phone"}}}'
     activate_alarm(None, data)
+    check_alarms()
     assert(len(active_schedule) == 2)
 
 def test_deactivate_alarm():

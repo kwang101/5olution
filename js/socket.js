@@ -1,4 +1,4 @@
-var socket = io.connect('http://206.87.212.9:8081');
+var socket = io.connect('http://206.87.212.9:8082');
 
 // Listen for initial server connection
 socket.on('items', function(items) {
@@ -12,7 +12,7 @@ socket.on('items', function(items) {
     $('#objectTable').append('<tr id="tr'+i+'"></tr>');
     $('#tr' + i).append($('<td>').text(i));
     $('#tr' + i).append($('<td id="tdname'+i+'"></td>').text(item['name']));
-    var $button = $('<button id="unregister'+i+'" class="btn btn-primary">Unregister</button>');
+    var $button = $('<button id="unregister'+i+'" class="btn btn-danger">Unregister</button>');
     $button.on('click', function() {
       unregisterItem(item.name);
     });
@@ -36,3 +36,9 @@ $('#addButton').click(function() {
   var item = buildItem($('#objectName').val());
   socket.emit('register', item);
 });
+
+$(".nav-tabs a").click(function(){
+    event.preventDefault();
+    $(this).tab('show');
+});
+

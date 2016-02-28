@@ -40,7 +40,7 @@
                   <i class="fa fa-bars"></i>
               </button>
               <a class="navbar-brand page-scroll" href="#page-top">
-                  <i class="fa fa-play-circle"></i>  <span class="light">Start</span> Bootstrap
+                  <i class="fa fa-play-circle"></i>  <span class="light">5pectrum</span>
               </a>
           </div>
 
@@ -60,36 +60,77 @@
       </div>
       <!-- /.container -->
   </nav>
+  <section id="item" class="margin-top-large text-center">
+      <div>
+          <div class="container">
+              <div class="col-lg-8 col-lg-offset-2">
+                  <h2>My Items</h2>
+              </div>
+          </div>
+      </div>
+  </section>
 
 </body>
-<!-- Download Section -->
-<section id="item" class="content-section text-center">
-    <div class="download-section">
-        <div class="container">
-            <div class="col-lg-8 col-lg-offset-2">
-                <h2>My Items</h2>
-            </div>
-        </div>
-    </div>
-</section>
 
 <section class='container'>
   <div class='row text-center'>
-    <div class='col-md-6'>
-      <a href='items.html' class='btn btn-primary'>My Items</a>
-    </div>
-    <div class='col-md-6'>
-      <a href='settings.html' class='btn btn-primary'>Settings</a>
+    <div class='col-md-12 margin-vert-small'>
+      <form class='form-inline'>
+        <button type='button' data-toggle='modal' data-target='#wait' id='addButton'class='btn btn-danger'>Register</button>
+        <div class='form-group'>
+          <input type='text' id='objectName' class='form-control' placeholder='Object Name'></input>
+        </div>
+      </form>
+      <div class="modal fade" id="wait" role="dialog">
+        <div class="modal-dialog">
+
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Waiting....</h4>
+            </div>
+            <div class="modal-body">
+              <p>Please place your object under the sensor</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
+<section class='container'>
+  <div class='row text-center'>
+    <div class='col-md-8 col-md-offset-2 margin-vert-small'>
+      <div class='panel panel-default'>
+        <div class='panel-heading'><h4>Items</h4></div>
+          <table id='objectHead' class='table table-bordered table-hover'>
+            <thead>
+              <tr>
+                <th class='text-center'>#</th>
+                <th class='text-center'>Object</th>
+                <th class='text-center'>Unregister</th>
+              </tr>
+            </thead>
+          </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
 <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
-<script src="../js/socket.js"></script>
 
 <!-- jQuery -->
 <script src="../js/jquery.js"></script>
-
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.0/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.0/js/bootstrap-toggle.min.js"></script>
 <!-- Bootstrap Core JavaScript -->
 <script src="../js/bootstrap.min.js"></script>
 
@@ -101,3 +142,4 @@
 
 <!-- Custom Theme JavaScript -->
 <script src="../js/grayscale.js"></script>
+<script src="../js/socket.js"></script>

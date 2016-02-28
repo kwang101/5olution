@@ -10,13 +10,13 @@ alarms = {}
 
 async def recv_command(websocket, path):
     global connections
-    while True:
-        try:
+    try:
+        while True:
             data = await websocket.recv()
             connections.add(websocket)
             response_data = parse_and_handle_data(data)
-        finally:
-            connections.remove(websocket)
+    finally:
+        connections.remove(websocket)
 
 def parse_and_handle_data(data):
     json = json.loads(data)
@@ -37,3 +37,11 @@ def activate_alarm(alarm_id, active_until):
 
 def deactivate_alarm(alarm_id):
     alarms.pop(alarm_id, None)
+
+def initialize_server():
+    start_server = ws.serve(recv_command, '127.0.0.1', 8080)
+    asyncio.get_event_loop().run_until_complete(start_server)
+    asyncio.get_event_loop().run_forever()
+
+if __name__ == '__main__':
+    initialize_server()

@@ -138,7 +138,7 @@
 
         <script type="text/javascript">
             // @param filename The name of the file WITHOUT ending
-            function playSound(filename){   
+            function playSound(filename){
                 document.getElementById("sound").innerHTML='<audio autoplay="autoplay"><source src="' + filename + '.mp3" type="audio/mpeg" /><source src="' + filename + '.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="' + filename +'.mp3" /></audio>';
             }
 
@@ -146,7 +146,7 @@
 
     <body>
 
-        <button onclick="playSound('bing');">Play</button>  
+        <button onclick="playSound('bing');">Play</button>
         <div id="sound"></div>
             </div>
           </div>
@@ -188,8 +188,8 @@
                   <th>Item</th>
                   <th>Start</th>
                   <th>Duration</th>
-                  <th>Remove</th>
                   <th>Toggle</th>
+                  <th>Remove</th>
                 </tr>
               </thead>
             </table>

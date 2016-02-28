@@ -3,12 +3,10 @@ import time
 import colour
 
 rgb_converter = 256
-bus = None
+max_register_diff = 1
 
 # Inspired by Brad Berkland
 def get_bus():
-    if bus is not None:
-        return bus
     bus = smbus.SMBus(1)
     bus.write_byte(0x29,0x80|0x12)
     ver = bus.read_byte(0x29)
@@ -38,13 +36,13 @@ def get_average(c0,c1,c2):
     red = (c0.red+c1.red+c2.red)/3
     green = (c0.green+c1.green+c2.green)/3
     blue = (c0.blue+c1.blue+c2.blue)/3
-    return_colour = colour.Colour(red,green,blue)
+    return colour.Colour(red,green,blue)
 
-def register_item():
+def register_item(bus):
     colours = []
-    normal_colour = colour.Colour(get_rgb_values())
-    time_counter = 0
-    while(time_counter < 100):
+    values = get_current_rgb_values()
+    normal_colour = colour.Colour(values[0], values[1], values[2])
+    for _ in range(20):
         values = get_current_rgb_values()
         colours.append(colour.Colour(values[0], values[1], values[2]))
         if len(colours) > 2:
@@ -53,15 +51,10 @@ def register_item():
             c2 = colours[len(colours)-3]
             average = get_average(c0,c1,c2)
             # Check that the colour is different from the normal colour
-            if colour.get_difference(average, normal_colour) > colour.max_rgb_diff:
+            if colour.get_difference(average, normal_colour) > max_register_diff:
                 # Check that the three values are close enough, i.e. that the item stopped moving
-                if (colour.get_difference(c0, c1) < colour.max_rgb_diff) and (colour.get_difference(c1, c2) < colour.max_rgb_diff):
+                if (colour.get_difference(c0, c1) < max_register_diff) and (colour.get_difference(c1, c2) < max_register_diff):
                     return average
             colours.pop(0)
-        time_counter += 1
-        time.sleep(0.25)
+        time.sleep(1)
     return -1
-
-
-
-

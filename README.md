@@ -1,3 +1,3 @@
 # 5olution
-nwHacks2016 Security App
+nwHacks2016 5pectrum App
 

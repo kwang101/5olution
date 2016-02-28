@@ -1,4 +1,4 @@
-var socket = io.connect('http://192.168.2.111:7984');
+var socket = io.connect('http://10.19.223.0:7984');
 
 var audio = new Audio('../resources/burglar_alarm_bell_sounding.mp3');
 audio.addEventListener('ended', function() {
@@ -17,7 +17,9 @@ function turnOnAudio() {
 }
 
 socket.on('start_alarm', function(colour) {
+  console.log('hi');
   turnOnAudio();
+  console.log('bye');
   $('#itemRemovedModal').modal('show');
 });
 
@@ -140,3 +142,5 @@ $('#addSchedule').click(function() {
   });
   $('#trs' + count).append($('<td>').append($button));
 });
+
+

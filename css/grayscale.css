@@ -421,6 +421,30 @@ body {
     -moz-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
     }
 
+.width-small {
+  width: 15%;
+}
+
+.margin-top-small {
+  margin-top: 30px;
+}
+
+.btn-group {
+  margin-top: 30px;
+}
+
+.width-pix {
+  width: 100px;
+}
+
+.bootstrap-switch {
+  margin-top: 30px;
+}
+
+.width-pix-big {
+  width: 150px;
+}
+
 /*!
  * image hover effect
  */
@@ -526,3 +550,4 @@ transition-delay:.2s;
         float: left;
     }
 }
+

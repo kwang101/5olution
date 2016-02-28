@@ -1,6 +1,7 @@
 import smbus
 import time
 import colour
+import datetime
 
 rgb_converter = 256
 max_register_diff = 1
@@ -24,13 +25,17 @@ def convert_rgb_values(clear, red, green, blue):
     blue = (float(blue)/clear)*rgb_converter
     return (red,green,blue)
 
-def get_current_rgb_values():
-    data = get_bus().read_i2c_block_data(0x29, 0)
+def get_current_rgb_values(bus):
+    data = bus.read_i2c_block_data(0x29, 0)
     clear = clear = data[1] << 8 | data[0]
     red = data[3] << 8 | data[2]
     green = data[5] << 8 | data[4]
     blue = data[7] << 8 | data[6]
     return convert_rgb_values(clear,red,green,blue)
+
+def get_current_colour(bus):
+    current_values = get_current_rgb_values(bus)
+    return colour.Colour(values[0], values[1], values[2])
 
 def get_average(c0,c1,c2):
     red = (c0.red+c1.red+c2.red)/3
@@ -40,11 +45,9 @@ def get_average(c0,c1,c2):
 
 def register_item(bus):
     colours = []
-    values = get_current_rgb_values()
-    normal_colour = colour.Colour(values[0], values[1], values[2])
+    normal_colour = get_current_colour(bus)
     for _ in range(20):
-        values = get_current_rgb_values()
-        colours.append(colour.Colour(values[0], values[1], values[2]))
+        colours.append(get_current_colour(bus))
         if len(colours) > 2:
             c0 = colours[len(colours)-1]
             c1 = colours[len(colours)-2]
@@ -58,3 +61,10 @@ def register_item(bus):
             colours.pop(0)
         time.sleep(1)
     return -1
+
+def item_is_locked_in(bus, colour, endtime):
+    while datetime.now() < endtime:
+        if not colour.equals(get_current_colour(bus), colour):
+            return False
+    return True
+

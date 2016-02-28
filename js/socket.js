@@ -1,4 +1,4 @@
-var socket = io.connect('http://206.87.212.9:8083');
+var socket = io.connect('http://192.168.2.111:7984');
 
 var audio = new Audio('../resources/burglar_alarm_bell_sounding.mp3');
 audio.addEventListener('ended', function() {
@@ -60,6 +60,26 @@ function unregisterItem(itemName) {
   socket.emit('unregister', buildItem(itemName));
 }
 
+function formatTime(hours, minutes) {
+  var time = hours*60 + minutes;
+  return time;
+}
+
+function formatStart(time) {
+  var hours = parseInt(time.substring(0,2));
+  var minutes = parseInt(time.substring(3,5));
+  var time = hours*60 + minutes;
+  return time;
+}
+
+function buildSchedule(days, startTime, duration, itemName) {
+  schedule = {'days': {}};
+  days.forEach(function(day) {
+    schedule["days"][day] = {"start_time": startTime, "duration": duration, "item_name": itemName};
+  });
+  return schedule;
+}
+
 $('#addButton').click(function() {
   var item = buildItem($('#objectName').val());
   socket.emit('register', item);
@@ -79,7 +99,6 @@ socket.on('itemList', function(items) {
 });
 
 $('#addSchedule').click(function() {
-  console.log(itemList);
   count++;
   $('#scheduleHead').append($('<tbody id="scheduleTable"></tbody>'));
   $select = $('<td><select id="daySelect'+count+'" multiple="multiple"><option value="monday">Monday</option><option value="tuesday">Tuesday</option><option value="wednesday">Wednesday</option><option value="thursday">Thursday</option><option value="friday">Friday</option><option value="saturday">Saturday</option><option value="sunday">Sunday</option></select></td>');
@@ -104,8 +123,20 @@ $('#addSchedule').click(function() {
   $button.on('click', function() {
     // removeAlarm(item.name);
   });
+  $('#trs' + count).append($('<td><input type="checkbox" id="toggleId'+count+'"></td>'));
+  var $toggle = $('#toggleId' + count);
+  $toggle.on('click', function() {
+    var dayArray = $('#daySelect' + count).val();
+    var nameItem = $('#nameSelect' + count).val();
+    var time = $('[value="09:30"]').val();
+    var hours = parseInt($('#hours'+count).val());
+    var minutes = parseInt($('#minutes'+count).val());
+    var duration = formatTime(hours, minutes);
+    var startTime = formatStart(time);
+    var schedule = JSON.stringify(buildSchedule(dayArray, startTime, duration, nameItem));
+    console.log(schedule);
+    socket.emit('create_alarm', schedule);
+    socket.emit('activate_alarm', schedule);
+  });
   $('#trs' + count).append($('<td>').append($button));
-  $('#trs' + count).append($('<td><input type="checkbox" class="margin-top-small" id="toggleId'+count+'"name="toggleActivate" checked></td>'));
-  $("[name='toggleActivate']").bootstrapSwitch();
 });
-

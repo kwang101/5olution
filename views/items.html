@@ -13,12 +13,14 @@
 
     <!-- Bootstrap Core CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-clockpicker.min.css">
     <!-- Custom CSS -->
     <link href="../css/grayscale.css" rel="stylesheet">
-
     <!-- Custom Fonts -->
     <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="../css/bootstrap.css" rel="stylesheet">
+    <link href="../css/bootstrap-switch.css" rel="stylesheet">
+
     <link href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
 
@@ -66,7 +68,7 @@
               <div class="col-lg-8 col-lg-offset-2">
                 <ul class="nav nav-tabs">
                   <li class='active'><a href="#myitems">My Items</a></li>
-                  <li><a href="#schedule">Schedule</a></li>
+                  <li><a id='scheduleTab'href="#schedule">Schedule</a></li>
                 </ul>
               </div>
           </div>
@@ -135,10 +137,32 @@
     </section>
   </div>
   <div id="schedule" class="tab-pane fade in text-center">
+    <section class='container margin-vert-small'>
+      <div class='row text-center'>
+        <div class='col-md-12'>
+          <button class='btn btn-primary' id='addSchedule'>Add New</button>
+        </div>
+      </div>
+    </section>
+
     <section class='container'>
       <div class='row text-center'>
         <div class='col-md-12 margin-vert-small'>
-          <a href='itemlog.html' class='btn btn-primary'>Log History</a>
+          <div class='panel panel-default'>
+            <div class='panel-heading'><h4>Schedules</h4></div>
+            <table id='scheduleHead' class='table table-bordered table-hover'>
+              <thead>
+                <tr>
+                  <th>Days</th>
+                  <th>Item</th>
+                  <th>Start</th>
+                  <th>Duration</th>
+                  <th>Remove</th>
+                  <th>Toggle</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
         </div>
       </div>
     </section>
@@ -151,13 +175,16 @@
 
 <!-- jQuery -->
 <script src="../js/jquery.js"></script>
-<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.0/css/bootstrap-toggle.min.css" rel="stylesheet">
+
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.0/js/bootstrap-toggle.min.js"></script>
 <!-- Bootstrap Core JavaScript -->
 <script src="../js/bootstrap.min.js"></script>
-
+<script type="text/javascript" src="../js/bootstrap-clockpicker.min.js"></script>
 <!-- Plugin JavaScript -->
 <script src="../js/jquery.easing.min.js"></script>
+<script type="text/javascript" src="../js/bootstrap-multiselect.js"></script>
+<script src="../js/bootstrap-switch.js"></script>
+<link rel="stylesheet" href="../css/bootstrap-multiselect.css" type="text/css"/>
 
 <!-- Google Maps API Key - Use your own API key to enable the map feature. More information on the Google Maps API can be found at https://developers.google.com/maps/ -->
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRngKslUGJTlibkQ3FkfTxj3Xss1UlZDA&sensor=false"></script>

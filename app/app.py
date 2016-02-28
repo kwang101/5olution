@@ -38,8 +38,7 @@ connections = set()
 alarms = {'id' : 0}
 items = {"test": Item("test", "red"), "test2" : Item("test2", "pink")}
 schedule = {}
-
-#items = {"test" + str(i) : Item("test" + str(i), "colour" + str(i)) for i in range(5)}
+active_schedule = {}
 
 def emit_items():
     sio.emit('items', json.dumps(list(items.values()), cls=MessageEncoder))
@@ -87,7 +86,8 @@ def is_compatible_schedule(candidate_timespans, schedule):
 
 def insert_timespan_into_schedule(timespan, schedule):
     for day, time_period in timespan.items():
-        schedule[day] = schedule.get(day, [time_period])
+        schedule[day] = schedule.get(day, [])
+        schedule[day].append(time_period)
 
 def emit_schedules():
 
@@ -99,28 +99,34 @@ def emit_schedules():
 def emit_error(error_message):
     sio.emit('errors', json.dumps({"Message": error_message}, cls=MessageEncoder))
 
+def format_timespan(timespan):
+    timespans = []
+    day = timespan.keys()[0]
+    start_time, duration, item_name = timespan[day]
+    if start_time + duration > 1440:
+        timespans.append({
+             day : (start_time, 1440, item_name)
+        })
+        timespans.append({
+             next_day[day] : (0, start_time + duration - 1440, item_name)
+        })
+    else:
+        timespans.append(timespan)
+    return timespans
+
+
+def remove_from_schedule(timespan, schedule):
+    for day, time_period in timespan.items():
+        schedule[day].remove(time_period)
+
+def parse_alarm_payload(data):
+    data = json.loads(data)
+    timespan = {day_name : (day['start_time'], day['duration'], day['item_name']) for day_name, day in data['days'].items()}
+    return format_timespan(timespan)
+
 @sio.on('create_alarm')
 def create_alarm(sid, data):
-    data = json.loads(data)
-    candidate_timespan = {day_name : (day['start_time'], day['duration'], day['item_name']) for day_name, day in data['days'].items()}
-
-    def format_timespan(timespan):
-        timespans = []
-        day = timespan.keys()[0]
-        start_time, duration, item_name = timespan[day]
-        if start_time + duration > 1440:
-            timespans.append({
-                 day : (start_time, 1440, item_name)
-            })
-            timespans.append({
-                 next_day[day] : (0, start_time + duration - 1440, item_name)
-            })
-        else:
-            timespans.append(timespan)
-        return timespans
-
-    timespans = format_timespan(candidate_timespan)
-
+    timespans = parse_alarm_payload(data)
     if is_compatible_schedule(timespans, schedule):
         for timespan in timespans:
             insert_timespan_into_schedule(timespan, schedule)
@@ -128,11 +134,23 @@ def create_alarm(sid, data):
     else:
         emit_error("The alarm you've inserted overlaps with another alarm already scheduled.")
 
-def activate_alarm(alarm_id, active_until):
-    alarms[alarm_id] = {'status': 'active', 'active_until': active_until}
+@sio.on('activate_alarm')
+def activate_alarm(sid, data):
+    timespans = parse_alarm_payload(data)
+    for timespan in timespans:
+        insert_timespan_into_schedule(timespan, active_schedule)
 
-def deactivate_alarm(alarm_id):
-    alarms.pop(alarm_id, None)
+@sio.on('deactivate_alarm')
+def deactivate_alarm(sid, data):
+    timespans = parse_alarm_payload(data)
+    for timespan in timespans:
+        remove_from_schedule(timespan, active_schedule)
+
+@sio.on('remove_alarm')
+def remove_alarm(sid, data):
+    timespans = parse_alarm_payload(data)
+    for timespan in timespans:
+        remove_from_schedule(timespan, schedule)
 
 def initialize_server():
     app = Flask(__name__)
@@ -149,6 +167,21 @@ def test_create_alarm():
     create_alarm(None, data3)
     assert(len(schedule) == 2)
 
+def test_activate_alarm():
+    data = '{"days": {"monday": {"start_time": 1023, "duration": 500, "item_name": "phone"}}}'
+    activate_alarm(None, data)
+    assert(len(active_schedule) == 2)
+
+def test_deactivate_alarm():
+    data = '{"days": {"monday": {"start_time": 1023, "duration": 500, "item_name": "phone"}}}'
+    deactivate_alarm(None, data)
+    assert(len(active_schedule['monday']) == 0)
+    activate_alarm(None, data)
+    assert(len(active_schedule['monday']) == 1)
+    assert(len(active_schedule['tuesday']) == 1)
+
 if __name__ == '__main__':
     test_create_alarm()
+    test_activate_alarm()
+    test_deactivate_alarm()
     initialize_server()

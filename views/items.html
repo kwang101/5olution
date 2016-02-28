@@ -37,14 +37,14 @@
  <!-- Navigation -->
   <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
       <div class="container">
-          <div class="navbar-header">
-              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
-                  <i class="fa fa-bars"></i>
-              </button>
-              <a class="navbar-brand page-scroll" href="#page-top">
-                  <i class="fa fa-play-circle"></i>  <span class="light">5pectrum</span>
-              </a>
-          </div>
+           <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand page-scroll" href="#page-top">
+                    <i class="fa fa-play-circle"></i>  <span class="light">5olution</span>
+                </a>
+            </div>
 
           <!-- Collect the nav links, forms, and other content for toggling -->
           <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
@@ -87,6 +87,7 @@
             </div>
             <button type='button' data-toggle='modal' data-target='#wait' id='addButton'class='btn btn-primary'>Register</button>
           </form>
+
           <div class="modal fade" id="wait" role="dialog">
             <div class="modal-dialog">
 
@@ -104,8 +105,21 @@
                 </div>
               </div>
 
+        <script type="text/javascript">
+            // @param filename The name of the file WITHOUT ending
+            function playSound(filename){   
+                document.getElementById("sound").innerHTML='<audio autoplay="autoplay"><source src="' + filename + '.mp3" type="audio/mpeg" /><source src="' + filename + '.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="' + filename +'.mp3" /></audio>';
+            }
+
+        </script>
+
+    <body>
+
+        <button onclick="playSound('bing');">Play</button>  
+        <div id="sound"></div>
             </div>
           </div>
+
         </div>
       </div>
     </section>

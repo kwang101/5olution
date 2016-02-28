@@ -1,5 +1,31 @@
 var socket = io.connect('http://192.168.2.111:7984');
 
+var audio = new Audio('../resources/burglar_alarm_bell_sounding.mp3');
+audio.addEventListener('ended', function() {
+    this.currentTime = 0;
+    this.play();
+}, false);
+audio.play();
+audio.muted = true;
+
+function turnOffAudio() {
+  audio.muted = true;
+}
+
+function turnOnAudio() {
+  audio.muted = false;
+}
+
+socket.on('start_alarm', function(colour) {
+  turnOnAudio();
+  $('#itemRemovedModal').modal('show');
+});
+
+socket.on('stop_alarm', function(colour) {
+  turnOffAudio();
+  $('#itemRemovedModal').modal('hide');
+});
+
 var itemList = [];
 var count = 0;
 

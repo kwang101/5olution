@@ -64,64 +64,66 @@
       <div>
           <div class="container">
               <div class="col-lg-8 col-lg-offset-2">
-                  <h2>My Items</h2>
+                <ul class="nav nav-tabs">
+                  <li class='active'><a href="#myitems">My Items</a></li>
+                  <li><a href="#schedule">Schedule</a></li>
+                </ul>
               </div>
           </div>
       </div>
   </section>
 
 </body>
-
-<section class='container'>
-  <div class='row text-center'>
-    <div class='col-md-12 margin-vert-small'>
-      <form class='form-inline'>
-        <button type='button' data-toggle='modal' data-target='#wait' id='addButton'class='btn btn-danger'>Register</button>
-        <div class='form-group'>
-          <input type='text' id='objectName' class='form-control' placeholder='Object Name'></input>
-        </div>
-      </form>
-      <div class="modal fade" id="wait" role="dialog">
-        <div class="modal-dialog">
-
-          <!-- Modal content-->
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
-              <h4 class="modal-title">Waiting....</h4>
+<div class="tab-content">
+  <div id="myitems" class="tab-pane fade in active">
+    <section class='container'>
+      <div class='row text-center'>
+        <div class='col-md-12 margin-vert-small'>
+          <form class='form-inline'>
+            <div class='form-group'>
+              <input type='text' id='objectName' class='form-control' placeholder='Object Name'></input>
             </div>
-            <div class="modal-body">
-              <p>Please place your object under the sensor</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type='button' data-toggle='modal' data-target='#wait' id='addButton'class='btn btn-primary'>Register</button>
+          </form>
+          <div class="modal fade" id="wait" role="dialog">
+            <div class="modal-dialog">
+
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Waiting....</h4>
+                </div>
+                <div class="modal-body">
+                  <p>Please place your object under the sensor</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+
             </div>
           </div>
-
         </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<section class='container'>
-  <div class='row text-center'>
-    <div class='col-md-8 col-md-offset-2 margin-vert-small'>
-      <div class='panel panel-default'>
-        <div class='panel-heading'><h4>Items</h4></div>
-          <table id='objectHead' class='table table-bordered table-hover'>
-            <thead>
-              <tr>
-                <th class='text-center'>#</th>
-                <th class='text-center'>Object</th>
-                <th class='text-center'>Unregister</th>
-              </tr>
-            </thead>
-          </table>
+    <section class='container'>
+      <div class='row text-center'>
+        <div class='col-md-8 col-md-offset-2 margin-vert-small'>
+          <div class='panel panel-default'>
+            <div class='panel-heading'><h4>Items</h4></div>
+              <table id='objectHead' class='table table-bordered table-hover'>
+              </table>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
   </div>
-</section>
+  <div id="schedule" class="tab-pane fade in active">
+    <p>hi</p>
+  </div>
+</div>
 
 
 

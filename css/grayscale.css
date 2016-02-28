@@ -8,8 +8,7 @@ body {
     width: 100%;
     height: 100%;
     font-family: Lora,"Helvetica Neue",Helvetica,Arial,sans-serif;
-    color:  #595959;
-    background-color: #ccffe6;
+    background-color: #e6fffa;
 }
 
 html {
@@ -67,6 +66,7 @@ a:focus {
     text-transform: uppercase;
     font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
     background-color: #000;
+    text-shadow: 1px 1px 2px black, 0 0 25px #595959, 0 0 5px #000000;
 }
 
 .navbar-custom .navbar-brand {
@@ -81,6 +81,7 @@ a:focus {
     padding: 4px 6px;
     font-size: 16px;
     color: #fff;
+    text-shadow: 1px 1px 2px black, 0 0 25px #595959, 0 0 5px #000000;
 }
 
 .navbar-custom .navbar-brand .navbar-toggle:focus,
@@ -90,6 +91,7 @@ a:focus {
 
 .navbar-custom a {
     color: #fff;
+    text-shadow: 1px 1px 2px black, 0 0 25px #595959, 0 0 5px #000000;
 }
 
 .navbar-custom .nav li a {
@@ -147,7 +149,7 @@ a:focus {
     padding: 100px 0;
     text-align: center;
     color: #fff;
-    background: url(../img/intro-bg.jpg) no-repeat bottom center scroll;
+    background: url(../img/background.jpg) no-repeat bottom center scroll;
     background-color: #000;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -162,10 +164,12 @@ a:focus {
 
 .intro .intro-body .brand-heading {
     font-size: 40px;
+    text-shadow: 1px 1px 2px black, 0 0 25px #595959, 0 0 5px #000000;
 }
 
 .intro .intro-body .intro-text {
     font-size: 18px;
+    text-shadow: 1px 1px 2px black, 0 0 25px #595959, 0 0 5px #000000;
 }
 
 @media(min-width:768px) {
@@ -193,9 +197,11 @@ a:focus {
     font-size: 40px;
     color: #fff;
     background: 0 0;
+    text-shadow: 1px 1px 2px black, 0 0 25px #595959, 0 0 5px #000000;
     -webkit-transition: background .3s ease-in-out;
     -moz-transition: background .3s ease-in-out;
     transition: background .3s ease-in-out;
+
 }
 
 .btn-circle:hover,
@@ -203,6 +209,7 @@ a:focus {
     outline: 0;
     color: #fff;
     background: rgba(255,255,255,.1);
+
 }
 
 .btn-circle i.animated {
@@ -373,5 +380,15 @@ body {
 }
 
 .background-color{
-    background-color: #ccffe6;
+    background-color: #e6fffa;
+}
+
+.text-color{
+    text-color: #595959;
+    text-shadow: 1px 1px 2px black, 0 0 25px #595959, 0 0 5px #000000;
+}
+
+.image-circle{
+    image-circle: src="Spectrum-Prism.jpg";
+    text-shadow: 1px 1px 2px black, 0 0 25px #595959, 0 0 5px #000000;
 }
